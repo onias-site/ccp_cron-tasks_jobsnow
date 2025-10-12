@@ -1,7 +1,7 @@
 package com.ccp.jn.cron.controller;
 
 import com.ccp.decorators.CcpJsonRepresentation;
-import com.ccp.especifications.mensageria.receiver.CcpBusiness;
+import com.ccp.business.CcpBusiness;
 import com.ccp.especifications.mensageria.receiver.CcpMensageriaReceiver;
 
 public class CcpCronTasksController {
