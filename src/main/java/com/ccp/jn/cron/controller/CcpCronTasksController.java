@@ -14,7 +14,7 @@ public class CcpCronTasksController {
 		CcpJsonRepresentation json = new CcpJsonRepresentation(parameters);
 		CcpMensageriaReceiver receiver = CcpMensageriaReceiver.getInstance(json);
 		CcpBusiness process = receiver.getProcess(topic, json);
-		process.apply(json);
+		process.execute(json);
 
 	}
 	
