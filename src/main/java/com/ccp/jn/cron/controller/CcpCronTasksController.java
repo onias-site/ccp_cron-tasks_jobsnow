@@ -5,8 +5,8 @@ import com.ccp.business.CcpBusiness;
 import com.ccp.especifications.mensageria.receiver.CcpMensageriaReceiver;
 
 /**
- * Ponto de entrada para execução de tarefas agendadas (cron jobs). Recebe o nome de um tópico e parâmetros
- * em formato JSON, resolve o processo responsável por esse tópico via CcpMensageriaReceiver e o executa.
+ * Entry point for scheduled tasks (cron jobs). Receives a topic name and JSON parameters,
+ * resolves the process responsible for that topic via CcpMensageriaReceiver and runs it.
  */
 public class CcpCronTasksController {
 
