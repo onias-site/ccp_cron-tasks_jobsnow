@@ -10,6 +10,14 @@ import com.ccp.especifications.mensageria.receiver.CcpMensageriaReceiver;
  */
 public class CcpCronTasksController {
 
+	/**
+	 * Runs the process of a topic: the parameters (a JSON text naming the receiver in {@code mensageriaReceiver}) select
+	 * the {@code CcpMensageriaReceiver}, which resolves and executes the process of the topic.
+	 * @param jnAsyncBusinessNotifyError not used
+	 * @param topic the topic (the class name of the process)
+	 * @param parameters the JSON parameters of the process
+	 * @throws Exception when the process fails
+	 */
 	public static void main(CcpBusiness jnAsyncBusinessNotifyError, String topic, String parameters) throws Exception {
 		CcpJsonRepresentation json = new CcpJsonRepresentation(parameters);
 		CcpMensageriaReceiver receiver = CcpMensageriaReceiver.getInstance(json);
