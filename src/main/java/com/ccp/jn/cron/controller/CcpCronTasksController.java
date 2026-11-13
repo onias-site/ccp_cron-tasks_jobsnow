@@ -12,6 +12,7 @@ import com.ccp.implementations.db.utils.elasticsearch.CcpElasticSearchDbRequest;
 import com.ccp.implementations.email.sendgrid.CcpSendGridEmailProvider;
 import com.ccp.implementations.file.bucket.gcp.CcpGcpFileBucket;
 import com.ccp.implementations.http.apache.mime.CcpApacheMimeHttp;
+import com.ccp.implementations.http.request.log.gcp.logging.CcpGcpHttpRequestLog;
 import com.ccp.implementations.instant.messenger.telegram.CcpTelegramInstantMessenger;
 import com.ccp.implementations.json.gson.CcpGsonJsonHandler;
 import com.ccp.implementations.main.authentication.gcp.oauth.CcpGcpMainAuthentication;
@@ -46,7 +47,8 @@ public class CcpCronTasksController {
 				CcpElasticSerchDbBulk.INSTANCE,
 				CcpElasticSearchCrud.INSTANCE,
 				CcpElasticSearchQueryExecutor.INSTANCE,
-				CcpApacheMimeHttp.INSTANCE
+				CcpApacheMimeHttp.INSTANCE,
+				CcpGcpHttpRequestLog.INSTANCE
 		);
 		String topic = args[0];
 		String parameters = args[1];
