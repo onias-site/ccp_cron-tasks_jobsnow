@@ -1,5 +1,9 @@
 package com.ccp.jn.cron.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.ccp.decorators.CcpJsonFieldName;
 import com.ccp.decorators.CcpJsonRepresentation;
 import com.ccp.business.CcpBusiness;
 import com.ccp.dependency.injection.CcpDependencyInjection;
@@ -56,19 +60,43 @@ public class CcpCronTasksController {
 		System.exit(0);
 	}
 
+	/** The texts of this class. */
+	static enum Constants implements CcpJsonFieldName {
+		/** Separates the topics of a job that runs several processes, one after the other. */
+		TOPICS_SEPARATOR { public String getValue() { return ","; } },
+	}
+
 	/**
-	 * Runs the process of a topic: the parameters (a JSON text naming the receiver in {@code mensageriaReceiver}) select
-	 * the {@code CcpMensageriaReceiver}, which resolves and executes the process of the topic.
-	 * @param topic the topic (the class name of the process)
-	 * @param parameters the JSON parameters of the process
-	 * @throws Exception when the process fails
+	 * Runs the process of each topic, in order: the parameters (a JSON text naming the receiver in
+	 * {@code mensageriaReceiver}) select the {@code CcpMensageriaReceiver}, which resolves and executes the process of the
+	 * topic. Since 2026-11-24 a job may name several topics separated by commas (the backup and then the daily resumes of
+	 * the positions, for example): a failing process does not stop the next ones, and the first failure is thrown at the end.
+	 * @param topics the topics (the class names of the processes), separated by commas
+	 * @param parameters the JSON parameters of the processes
+	 * @throws Exception when a process fails
 	 */
-	public static void main(String topic, String parameters) throws Exception {
+	public static void main(String topics, String parameters) throws Exception {
 		CcpJsonRepresentation json = new CcpJsonRepresentation(parameters);
 		CcpMensageriaReceiver receiver = CcpMensageriaReceiver.getInstance(json);
-		CcpBusiness process = receiver.getProcess(topic, json);
-		process.execute(json);
-
+		String separator = Constants.TOPICS_SEPARATOR.getValue();
+		String[] topicList = topics.split(separator);
+		List<Exception> failures = new ArrayList<>();
+		for (String topic : topicList) {
+			String trimmedTopic = topic.trim();
+			try {
+				CcpBusiness process = receiver.getProcess(trimmedTopic, json);
+				process.execute(json);
+			} catch (Exception failure) {
+				failure.printStackTrace();
+				failures.add(failure);
+			}
+		}
+		boolean everyProcessRan = failures.isEmpty();
+		if(everyProcessRan) {
+			return;
+		}
+		Exception firstFailure = failures.get(0);
+		throw firstFailure;
 	}
 	
 	
